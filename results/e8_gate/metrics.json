@@ -1,0 +1,72 @@
+{
+  "setup": {
+    "seed": 7,
+    "n_field": 30,
+    "latent_dim": 101,
+    "beta": 1.4,
+    "gamma": 0.14,
+    "theta_true": [
+      0.35,
+      -0.55,
+      0.45
+    ]
+  },
+  "smc": {
+    "time_s": 0.0,
+    "n_temps": -1,
+    "modes": {
+      "mass_pos": 0.5570860847865804,
+      "mass_neg": 0.44291391521341966,
+      "mean_pos": 0.4920598169492961,
+      "mean_neg": -0.49756417061616975,
+      "minority_mass": 0.44291391521341966,
+      "bimodal": true
+    }
+  },
+  "vi_restarts": [
+    {
+      "restart": 0,
+      "final_loss": -27.79969596862793,
+      "mass_pos": 0.0,
+      "mass_neg": 1.0000000000000004,
+      "mean_pos": NaN,
+      "mean_neg": -0.5495595488436518,
+      "minority_mass": 0.0,
+      "bimodal": false
+    },
+    {
+      "restart": 1,
+      "final_loss": -42.92661666870117,
+      "mass_pos": 0.13625,
+      "mass_neg": 0.8637500000000004,
+      "mean_pos": 0.9999078287990815,
+      "mean_neg": -0.9999998540850692,
+      "minority_mass": 0.13625,
+      "bimodal": true
+    },
+    {
+      "restart": 2,
+      "final_loss": -25.088924407958984,
+      "mass_pos": 0.0,
+      "mass_neg": 1.0000000000000004,
+      "mean_pos": NaN,
+      "mean_neg": -0.5531222073771058,
+      "minority_mass": 0.0,
+      "bimodal": false
+    },
+    {
+      "restart": 3,
+      "final_loss": -22.880231857299805,
+      "mass_pos": 0.0,
+      "mass_neg": 1.0000000000000004,
+      "mean_pos": NaN,
+      "mean_neg": -0.5363336900323628,
+      "minority_mass": 0.0,
+      "bimodal": false
+    }
+  ],
+  "gate": {
+    "smc_bimodal": true,
+    "vi_collapsed_fraction": 0.75
+  }
+}

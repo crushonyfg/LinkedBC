@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+*.pyo
+# generated binary artifacts (metrics.json kept as human-readable reference)
+results/**/*.npz
+.DS_Store
