@@ -363,6 +363,19 @@ module-2 偶函数 `η₂ = 0.65u₁ + cos(1.2πx) + β(θ₂²−c) + γu₁(θ
 **相对峰质量只近似 50/50（0.44/0.56）**——局部 move 跨不过 θ₂=0 势垒，well-separated 峰的
 相对归一化是 SMC 的软肋，正好 motivate E9 里 GFlowNet / mode-jumping 的价值。
 
+### E9 进展（三线对比，进行中 — `seq_proposal.py`）
+
+共享底座 = **自回归 per-block conditional-flow proposal** `q_φ(W|O)=Π_j q_{φ,j}(W_j|W_π(<j),O)`
+（顺序 b3→b2→b1，每块一个 conditional RealNVP，条件 = 已生成块的 separator 消息 + routed
+观测嵌入 b3←y / b2←[z2,y] / b1←z1）。
+
+- **架构自洽性验证通过**：`max|logq_sample − logq_eval| = 0.00e+00` —— 自回归 flow 的
+  exact `log q = Σ_j log q_j` 正确，IS/SMC 权重与 GFlowNet 所需的免费精确密度到位。
+- **Line 1（reverse-KL VI，pathwise）已接通**：双峰 testbed 上 **3/3 restart 塌到单峰**
+  （θ2 全负，minority mass 0.00）——符合 mode-seeking 预期，构成主表第一列。
+- 待接：**Line 2** GFlowNet（VarGrad-TB，off-policy，预期覆盖双峰）、**Line 3** 用同一
+  proposal 做 learned-proposal tempered SMC；指标 mode recall（对 E8 SMC ground truth）+ SBC。
+
 **已知的原型级简化**（非 bug，是范围）：CNF 精确 `log q_φ` + IS/PSIS 的严格 hybrid 未做
 （现用 particle→MCMC 校正）；FMPE 只在固定 design 上 amortize（未做变 design 的 set-encoder）；
 SMC step-size 自适应在温度很少时不充分（提高 `--ess-target`/`--n-mh` 即可）；

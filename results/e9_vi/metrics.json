@@ -1,0 +1,44 @@
+{
+  "setup": {
+    "seed": 7,
+    "latent_dim": 101,
+    "testbed": "bimodal_even_theta2",
+    "self_consistency_maxerr": 0.0
+  },
+  "vi_line": [
+    {
+      "restart": 0,
+      "train_s": 130.15944981575012,
+      "final_loss": -38.960792541503906,
+      "mass_pos": 0.00025,
+      "mass_neg": 0.9997500000000004,
+      "mean_pos": 0.9998509883880615,
+      "mean_neg": -1.0,
+      "minority_mass": 0.00025,
+      "bimodal": false
+    },
+    {
+      "restart": 1,
+      "train_s": 128.06987953186035,
+      "final_loss": -23.001707077026367,
+      "mass_pos": 0.0,
+      "mass_neg": 1.0000000000000004,
+      "mean_pos": NaN,
+      "mean_neg": -0.5447458554394542,
+      "minority_mass": 0.0,
+      "bimodal": false
+    },
+    {
+      "restart": 2,
+      "train_s": 128.91188645362854,
+      "final_loss": -55.979393005371094,
+      "mass_pos": 0.0,
+      "mass_neg": 1.0000000000000004,
+      "mean_pos": NaN,
+      "mean_neg": -0.5093165921643374,
+      "minority_mass": 0.0,
+      "bimodal": false
+    }
+  ],
+  "collapsed_fraction": 1.0
+}
