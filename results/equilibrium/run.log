@@ -1,0 +1,13 @@
+
+===== Bidirectional equilibrium calibration =====
+true theta = [ 0.35 -0.55]
+
+[Exp1 UNIQUE equilibrium]  (10s)
+  network KOH (feedback-aware): theta=[ 0.219 -0.425]  RMSE=0.128  cover=[True, True]
+  feedback-IGNORING baseline:   theta=[-0.388 -0.386]  RMSE=0.534  cover=[False, True]
+  -> feedback matters: YES
+
+[Exp2 BISTABLE, branch-symmetric observable]  (12s)
+  solver finds 2 equilibria: mean |u2+ - u2-| = 2.61
+  branch-aware SMC: pos-branch mass=1.00  minority=-0.00  (bimodal if ~0.5)
+  single-branch SMC: pos-branch mass=1.00  minority=0.00  (misses a branch if ~0)

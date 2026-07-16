@@ -1,0 +1,58 @@
+{
+  "setup": {
+    "seed": 7,
+    "theta_true": [
+      0.35,
+      -0.55
+    ]
+  },
+  "exp1_unique": {
+    "network_KOH": {
+      "mean": [
+        0.21877111058187224,
+        -0.4245284618238742
+      ],
+      "rmse": 0.12838249162210202,
+      "coverage95": [
+        true,
+        true
+      ]
+    },
+    "feedback_ignoring": {
+      "mean": [
+        -0.38778655087715524,
+        -0.3863102013806151
+      ],
+      "rmse": 0.5343797080855822,
+      "coverage95": [
+        false,
+        true
+      ]
+    },
+    "time_s": 10.371487140655518
+  },
+  "exp2_bistable": {
+    "solver_branch_gap": 2.6091452427494004,
+    "branch_aware": {
+      "branch_pos_mass": 1.0000000000000002,
+      "minority_mass": -2.220446049250313e-16,
+      "theta": {
+        "mean": [
+          0.12907674206752803,
+          0.2586013139229856
+        ],
+        "rmse": 0.5927238694255008,
+        "coverage95": [
+          true,
+          false
+        ]
+      },
+      "n_temps": 6
+    },
+    "single_branch": {
+      "branch_pos_mass": 1.0,
+      "minority_mass": 0.0
+    },
+    "time_s": 12.036611795425415
+  }
+}

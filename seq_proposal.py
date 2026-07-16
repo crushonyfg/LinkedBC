@@ -97,6 +97,15 @@ class CondRealNVP(torch.nn.Module):
             logdet = logdet + ld
         return (-0.5 * (z * z).sum(-1) - self._c) + logdet
 
+    def sample_x(self, cond: torch.Tensor, temp: float = 1.0, gen=None):
+        """Sample W only (no logq) with a temperature-scaled base, for off-policy
+        exploration; density is recomputed via log_prob at T=1 by the caller."""
+        z = temp * torch.randn(cond.shape[0], self.dim, generator=gen)
+        x = z
+        for layer in self.layers:
+            x, _ = layer(x, cond)
+        return x
+
 
 def mlp(sizes):
     L = []
@@ -159,6 +168,16 @@ class SeqProposal(torch.nn.Module):
         lq2 = self.f2.log_prob(w2, torch.cat([e_zy2, self.enc_p3(w3)], -1))
         lq1 = self.f1.log_prob(w1, torch.cat([e_z1, self.enc_p2(w2)], -1))
         return lq1 + lq2 + lq3
+
+    def behavior_sample(self, n: int, oc: dict, temp: float, gen=None):
+        """Off-policy exploratory draw (no grad expected); returns flat W only."""
+        e_y = oc["y"].unsqueeze(0).expand(n, -1)
+        e_zy2 = oc["zy2"].unsqueeze(0).expand(n, -1)
+        e_z1 = oc["z1"].unsqueeze(0).expand(n, -1)
+        w3 = self.f3.sample_x(e_y, temp, gen)
+        w2 = self.f2.sample_x(torch.cat([e_zy2, self.enc_p3(w3)], -1), temp, gen)
+        w1 = self.f1.sample_x(torch.cat([e_z1, self.enc_p2(w2)], -1), temp, gen)
+        return self._assemble(w3, w2, w1)
 
 
 # --------------------------------------------------------------------------- #

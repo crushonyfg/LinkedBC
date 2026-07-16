@@ -109,6 +109,21 @@ class GPModule:
         d2 = torch.clamp(a2 + b2 - 2.0 * cross, min=0.0)
         return self.signal**2 * torch.exp(-0.5 * d2)
 
+    def predict_mean(self, V: torch.Tensor) -> torch.Tensor:
+        """V: (C, n, d) -> mean (C, n). Cheap (no covariance); for solver iterates."""
+        C = V.shape[0]
+        kVX = self._rbf(V, self.Xtrain.unsqueeze(0).expand(C, -1, -1))
+        return self.y_mean + self.y_std * (kVX @ self.alpha)
+
+    def predict_mean_var(self, V: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor]:
+        """V: (C, n, d) -> mean (C, n), marginal var (C, n). No (n,n) covariance."""
+        C = V.shape[0]
+        kVX = self._rbf(V, self.Xtrain.unsqueeze(0).expand(C, -1, -1))     # (C,n,m)
+        mean = self.y_mean + self.y_std * (kVX @ self.alpha)
+        red = torch.einsum("cnm,mk,cnk->cn", kVX, self.Kinv, kVX)          # kVX Kinv kXV diag
+        var = self.y_std**2 * torch.clamp(self.signal**2 - red, min=0.0)
+        return mean, var
+
     def predict_mean_cov(self, V: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor]:
         """V: (C, n, d) -> mean (C, n), cov (C, n, n)."""
         C = V.shape[0]

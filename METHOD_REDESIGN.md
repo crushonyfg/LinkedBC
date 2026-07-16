@@ -166,8 +166,9 @@ likelihood-tempered 目标序列
 
 代码：`flow_matching.py`。从完整 cascade 生成 paired samples `(O, θ, c, U) ~ p(·)`
 （祖先采样，**无 simulator gradient、训练期不算 likelihood**），训练条件 flow matching
-`q_φ(θ,c,U | O) ≈ p(θ,c,U | O)`（FMPE，Dax et al. 2023：CNF 做 SBI，只需 simulator
-samples 不需 derivatives）。采用 rectified-flow / linear CFM：`W_t=(1-t)W₀+tW₁`，
+`q_φ(θ,c,U | O) ≈ p(θ,c,U | O)`（flow-matching SBI，**Wildberger et al. 2023 NeurIPS**，
+Dax 为共同作者；CNF 做 SBI，只需 simulator samples 不需 derivatives。注意 flow matching
+是 forward-KL 式 **mode-covering**，与 reverse-KL VI 的 mode-seeking 相反）。采用 rectified-flow / linear CFM：`W_t=(1-t)W₀+tW₁`，
 回归 `v=W₁-W₀`；推断时从 `N(0,I)` 沿 ODE（Heun）积分到 `t=1`，conditioned on `O_real`。
 amortization 范围：**固定 design**（固定 x 网格与 sensor 位置/数量），只对数据实现
 amortize，故与 Route B 求解同一 twin，可直接对标并互为校验。
@@ -242,10 +243,13 @@ GFlowNet 的 fixed point 也是真后验，其相对 VI 的收益来自 off-poli
 
 ## 7. 与前沿工作的区分（必须清楚划界）
 
-**Deep Gaussian Processes on DAGs（arXiv 2607.09645, 2026-07-10；用户提供，待核）**：
-研究 DAG 上 GP 函数组合、中间函数部分观测、uncertainty propagation、保留 graph
-dependence 与 collider explaining-away 的 structured VI。其重点是 **DAG deep-GP 函数
-学习/emulation + structured VI**。
+**Deep Gaussian Processes on DAGs（arXiv 2607.09645, Perlino, Hamelijnck, Johansen,
+Damoulas, 2026-07-10；已核实为真实工作，直接抓取摘要页确认）**：DAG 上 GP 函数组合、
+中间函数部分观测、prior-collapse、保留 compositional uncertainty 与 collider 的
+structured VI（latent-collider / 蛋白信号网络 / multi-fidelity emulation 验证）。其重点是
+**DAG deep-GP 函数学习/emulation + structured VI**——是与本工作最接近的**并发**工作，
+必须在**推断方法**（本工作的 amortized 图结构 proposal + TB/SMC vs 其 structured VI）与
+**可辨识性/双峰**焦点上明确区分。
 
 本方法的重点与之正交/互补：
 ```
